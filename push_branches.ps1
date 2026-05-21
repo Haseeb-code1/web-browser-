@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 
-# GitHub Personal Access Token (PAT) with repo permissions
-$token = 'REMOVED'
+# GitHub authentication using environment variable GITHUB_TOKEN
+$token = $env:GITHUB_TOKEN
 # Set remote URL with token authentication
 git remote set-url origin "https://$token@github.com/Haseeb-code1/web-browser-.git"
 
