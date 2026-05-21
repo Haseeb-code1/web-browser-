@@ -1,0 +1,37 @@
+[
+    {
+        "url": "data:text/html;charset=UTF-8,%0A            %3Chtml%3E%0A                %3Cbody style%3D%27font-family%3A sans-serif%3B padding%3A 50px%3B text-align%3A center%3B color%3A %23333%3B%27%3E%0A                    %3Ch1%3EOops%21 Something went wrong.%3C%2Fh1%3E%0A                    %3Cp%3EWe couldn%27t load the page at%3A%3C%2Fp%3E%0A                    %3Cb style%3D%27color%3A %23d9534f%3B%27%3Ehttps%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3Dhello%26sca_esv%3Db8a9ad9bb8655678%26source%3Dhp%26ei%3DMLEGapn4C-DW7M8Pu6TvgAk%26iflsig%3DAFdpzrgAAAAAaga_QBoOv4IRoYODPh0mAckx9B4J_NqG%26ved%3D0ahUKEwiZ0LbpybqUAxVgK_sDHTvSG5AQ4dUDCBk%26uact%3D5%26oq%3Dhello%26gs_lp%3DEgdnd3Mtd2l6IgVoZWxsbzIIEC4YgAQYsQMyCBAAGIAEGLEDMggQLhiABBixAzIIEC4YgAQYsQMyCBAuGLEDGIAEMgUQABiABDIOEC4YgAQYsQMYxwEY0QMyCBAAGIAEGLEDMggQABiABBixAzIIEC4YgAQYsQNI2A1QrwZYmQtwAXgAkAEAmAG6AqABygmqAQcwLjEuMy4xuAEDyAEA-AEBmAIGoAKeC6gCCsICChAAGAMYjwEY6gLCAgoQLhgDGI8BGOoCwgILEAAYgAQYsQMYgwHCAhEQLhiABBixAxiDARjHARjRA8ICDhAAGIAEGIoFGLEDGIMBwgIOEC4YgAQYigUYsQMYgwHCAhEQLhiABBiKBRixAxjHARjRA5gDLfEFPHu9YHlhOZySBwcxLjAuNC4xoAenPLIHBTItNC4xuAfxCsIHBTMtMS41yAelAYAIAQ%26sclient%3Dgws-wiz%26sei%3DOrEGapHtPPuskdUP4-3J8Qc%3C%2Fb%3E%0A                    %3Cp%3EPlease check the URL or your internet connection.%3C%2Fp%3E%0A                %3C%2Fbody%3E%0A            %3C%2Fhtml%3E%0A            ",
+        "title": "about:blank",
+        "timestamp": "2026-05-15T05:38:12.192702"
+    },
+    {
+        "url": "https://www.google.com/?zx=1778805816751",
+        "title": "Google",
+        "timestamp": "2026-05-15T05:43:46.009512"
+    },
+    {
+        "url": "https://www.google.com/?zx=1778806106250",
+        "title": "Google",
+        "timestamp": "2026-05-15T05:49:28.246552"
+    },
+    {
+        "url": "https://www.google.com/?zx=1778806819831",
+        "title": "Google",
+        "timestamp": "2026-05-15T06:00:29.297244"
+    },
+    {
+        "url": "https://en1.savefrom.net/1-youtube-video-downloader-18Cs/",
+        "title": "Download Youtube ...",
+        "timestamp": "2026-05-15T06:39:50.712407"
+    },
+    {
+        "url": "https://www.google.com/search?q=hello&sca_esv=6d5929912b5ed4ee&source=hp&ei=udsGaq6nM-WOhbIP_96iiQM&iflsig=AFdpzrgAAAAAagbpyUJPI2dkPf1dWk8OO863n0cM8xJO&ved=0ahUKEwju54Gy8rqUAxVlR0EAHX-vKDEQ4dUDCBQ&uact=5&oq=hello&gs_lp=Egdnd3Mtd2l6IgVoZWxsbzIIEC4YgAQYsQMyCBAAGIAEGLEDMggQLhiABBixAzIIEC4YgAQYsQMyCBAuGLEDGIAEMgUQABiABDIOEC4YgAQYsQMYxwEY0QMyCBAAGIAEGLEDMggQABiABBixAzILEC4YgAQYsQMYgwFI0BRQywZYuBJwAXgAkAEAmAHAAqABmAiqAQcwLjQuMC4xuAEDyAEA-AEBmAIGoALxCKgCCsICChAAGAMYjwEY6gLCAgoQLhgDGI8BGOoCwgILEAAYgAQYsQMYgwHCAhEQLhiABBixAxiDARjHARjRA8ICDhAuGIAEGIoFGLEDGIMBwgIREC4YgAQYigUYsQMYxwEY0QPCAgsQABiABBiKBRixA8ICDhAAGIAEGIoFGLEDGIMBwgIEEAAYA5gDHPEFu8wRjIL0-wmSBwcxLjIuMi4xoAevPLIHBzAuMi4yLjG4B9UIwgcHMi0xLjQuMcgHR4AIAQ&sclient=gws-wiz&sei=zNsGavv2H4yghbIPur6s2Qk",
+        "title": "Google",
+        "timestamp": "2026-05-15T08:39:44.568567"
+    },
+    {
+        "url": "https://www.google.com/?zx=1779097690827",
+        "title": "Google",
+        "timestamp": "2026-05-18T19:48:35.836326"
+    }
+]

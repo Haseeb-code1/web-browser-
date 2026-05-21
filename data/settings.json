@@ -1,0 +1,9 @@
+{
+    "homepage": "https://www.google.com",
+    "search_engine": "https://duckduckgo.com/?q=",
+    "theme": "dark",
+    "save_passwords": false,
+    "save_payments": false,
+    "show_bookmarks": false,
+    "sync_enabled": false
+}
