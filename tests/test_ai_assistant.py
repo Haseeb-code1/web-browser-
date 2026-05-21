@@ -1,11 +1,9 @@
+from unittest.mock import Mock
+
 import pytest
-from unittest.mock import Mock, patch
 from src.ai_assistant.model_router import ModelRouter
 from src.ai_assistant.groq_client import GroqClient, GroqNotConfiguredError
-from src.ai_assistant.ollama_client import OllamaClient
 from src.ai_assistant.browser_controller import BrowserController
-from src.ai_assistant.selection_watcher import SelectionWatcher
-from PyQt6.QtCore import QUrl
 
 def test_model_router_selects_groq():
     gc = Mock()
