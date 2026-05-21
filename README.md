@@ -1,6 +1,6 @@
-# Python Web Browser
+# Nova Browser
 
-A modern, fully functional desktop web browser built with Python 3.11+ and PyQt6 (QtWebEngine). 
+A modern, fully functional desktop web browser built with Python 3.11+ and PyQt6 (QtWebEngine).
 
 ## Installation
 ```bash
