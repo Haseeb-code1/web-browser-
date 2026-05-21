@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 520" width="680" height="520">
+<style>
+    text { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11px; fill: #e2e8f0; }
+    .title { font-size: 14px; font-weight: bold; fill: #ffffff; }
+    .stereotype { font-size: 10px; fill: #94a3b8; font-style: italic; }
+    .class-header { font-size: 11px; font-weight: bold; fill: #ffffff; }
+    .arrow-label { font-size: 9px; fill: #94a3b8; }
+</style>
+<defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#94a3b8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="inheritance" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+        <path d="M 2 1 L 9 5 L 2 9 Z" fill="#0f111a" stroke="#94a3b8" stroke-width="1"/>
+    </marker>
+    <marker id="composition" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+        <path d="M 2 6 L 6 2 L 10 6 L 6 10 Z" fill="#94a3b8" stroke="#94a3b8" stroke-width="1"/>
+    </marker>
+</defs>
+<rect width="100%" height="100%" fill="#0f111a" stroke="#1e293b" stroke-width="1"/>
+<text x="20" y="25" class="title">Diagram 1 — Core UI Layer Class Diagram</text>
+<rect x="40" y="50" width="180" height="75" fill="#0f2038" stroke="#3b82f6" stroke-width="1" rx="0" ry="0" />
+<line x1="40" y1="74" x2="220" y2="74" stroke="#3b82f6" stroke-width="1" />
+<text x="130.0" y="62" class="stereotype" text-anchor="middle">«QWidget»</text>
+<text x="130.0" y="74" class="class-header" text-anchor="middle">SplashScreen</text>
+<text x="48" y="88" class="">- animation</text>
+<line x1="40" y1="90" x2="220" y2="90" stroke="#3b82f6" stroke-width="1" />
+<text x="48" y="104" class="">+ show_animation()</text>
+<text x="48" y="116" class="">+ launch_browser()</text>
+<rect x="250" y="50" width="190" height="75" fill="#0f2038" stroke="#3b82f6" stroke-width="1" rx="0" ry="0" />
+<line x1="250" y1="74" x2="440" y2="74" stroke="#3b82f6" stroke-width="1" />
+<text x="345.0" y="62" class="stereotype" text-anchor="middle">«QDialog»</text>
+<text x="345.0" y="74" class="class-header" text-anchor="middle">ExtensionsDialog</text>
+<text x="258" y="88" class="">- extension_list</text>
+<line x1="250" y1="90" x2="440" y2="90" stroke="#3b82f6" stroke-width="1" />
+<text x="258" y="104" class="">+ toggle_extension()</text>
+<rect x="440" y="150" width="210" height="115" fill="#0f2038" stroke="#3b82f6" stroke-width="1" rx="0" ry="0" />
+<line x1="440" y1="174" x2="650" y2="174" stroke="#3b82f6" stroke-width="1" />
+<text x="545.0" y="162" class="stereotype" text-anchor="middle">«QMainWindow»</text>
+<text x="545.0" y="174" class="class-header" text-anchor="middle">BrowserWindow</text>
+<text x="448" y="188" class="">- address_bar</text>
+<text x="448" y="200" class="">- navigation_controls</text>
+<text x="448" y="212" class="">- sidebar</text>
+<text x="448" y="224" class="">- floating_bot</text>
+<line x1="440" y1="226" x2="650" y2="226" stroke="#3b82f6" stroke-width="1" />
+<text x="448" y="240" class="">+ setup_ui()</text>
+<text x="448" y="252" class="">+ apply_theme()</text>
+<text x="448" y="264" class="">+ open_tab()</text>
+<text x="448" y="276" class="">+ toggle_sidebar()</text>
+<rect x="220" y="160" width="190" height="115" fill="#0f2038" stroke="#3b82f6" stroke-width="1" rx="0" ry="0" />
+<line x1="220" y1="184" x2="410" y2="184" stroke="#3b82f6" stroke-width="1" />
+<text x="315.0" y="172" class="stereotype" text-anchor="middle">«QTabWidget»</text>
+<text x="315.0" y="184" class="class-header" text-anchor="middle">TabManager</text>
+<text x="228" y="198" class="">- standard_profile</text>
+<text x="228" y="210" class="">- incognito_profile</text>
+<text x="228" y="222" class="">- ad_blocker</text>
+<line x1="220" y1="224" x2="410" y2="224" stroke="#3b82f6" stroke-width="1" />
+<text x="228" y="238" class="">+ new_tab()</text>
+<text x="228" y="250" class="">+ new_incognito_tab()</text>
+<text x="228" y="262" class="">+ inject_extensions()</text>
+<text x="228" y="274" class="">+ on_download()</text>
+<rect x="30" y="310" width="170" height="75" fill="#0f2038" stroke="#3b82f6" stroke-width="1" rx="0" ry="0" />
+<line x1="30" y1="328" x2="200" y2="328" stroke="#3b82f6" stroke-width="1" />
+<text x="115.0" y="322" class="class-header" text-anchor="middle">DownloadManager</text>
+<text x="38" y="342" class="">- destination</text>
+<line x1="30" y1="344" x2="200" y2="344" stroke="#3b82f6" stroke-width="1" />
+<text x="38" y="358" class="">+ handle_download()</text>
+<text x="38" y="370" class="">+ show_dialog()</text>
+<rect x="220" y="310" width="190" height="75" fill="#0f2038" stroke="#3b82f6" stroke-width="1" rx="0" ry="0" />
+<line x1="220" y1="334" x2="410" y2="334" stroke="#3b82f6" stroke-width="1" />
+<text x="315.0" y="322" class="stereotype" text-anchor="middle">«QWebEnginePage»</text>
+<text x="315.0" y="334" class="class-header" text-anchor="middle">CustomWebPage</text>
+<text x="228" y="348" class="">- profile</text>
+<line x1="220" y1="350" x2="410" y2="350" stroke="#3b82f6" stroke-width="1" />
+<text x="228" y="364" class="">+ acceptNavigationRequest()</text>
+<rect x="30" y="160" width="160" height="50" fill="#1e2022" stroke="#64748b" stroke-width="1" rx="0" ry="0" />
+<line x1="30" y1="178" x2="190" y2="178" stroke="#64748b" stroke-width="1" />
+<text x="110.0" y="172" class="class-header" text-anchor="middle">ExtensionManager</text>
+<line x1="30" y1="182" x2="190" y2="182" stroke="#64748b" stroke-width="1" />
+<rect x="30" y="230" width="160" height="50" fill="#1e2022" stroke="#64748b" stroke-width="1" rx="0" ry="0" />
+<line x1="30" y1="248" x2="190" y2="248" stroke="#64748b" stroke-width="1" />
+<text x="110.0" y="242" class="class-header" text-anchor="middle">AdBlockerInterceptor</text>
+<line x1="30" y1="252" x2="190" y2="252" stroke="#64748b" stroke-width="1" />
+<line x1="440" y1="210" x2="410" y2="210" stroke="#94a3b8" stroke-width="0.5" marker-start="url(#composition)" />
+<text x="425" y="203" class="arrow-label">1</text>
+<text x="448" y="203" class="arrow-label">1</text>
+<line x1="315" y1="275" x2="315" y2="310" stroke="#94a3b8" stroke-width="0.5" marker-start="url(#composition)" />
+<text x="320" y="285" class="arrow-label">1</text>
+<text x="320" y="305" class="arrow-label">*</text>
+<line x1="220" y1="260" x2="115" y2="310" stroke="#94a3b8" stroke-width="0.5" marker-start="url(#composition)" />
+<text x="190" y="270" class="arrow-label">1</text>
+<text x="130" y="300" class="arrow-label">1</text>
+<line x1="220" y1="185" x2="190" y2="185" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="200" y="178" class="arrow-label">uses</text>
+<line x1="220" y1="240" x2="190" y2="245" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="200" y="233" class="arrow-label">uses</text>
+<rect x="470" y="310" width="150" height="50" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="470" y1="334" x2="620" y2="334" stroke="#0d9488" stroke-width="1" />
+<text x="545.0" y="322" class="stereotype" text-anchor="middle">«QWidget»</text>
+<text x="545.0" y="334" class="class-header" text-anchor="middle">FloatingBot</text>
+<line x1="470" y1="338" x2="620" y2="338" stroke="#0d9488" stroke-width="1" />
+<line x1="545" y1="265" x2="545" y2="310" stroke="#94a3b8" stroke-width="0.5" marker-start="url(#composition)" />
+<text x="550" y="275" class="arrow-label">1</text>
+<text x="550" y="302" class="arrow-label">1</text>
+</svg>

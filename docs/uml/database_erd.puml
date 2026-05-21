@@ -1,0 +1,115 @@
+@startuml NeuralBrowser_DatabaseERD
+title NeuralBrowser — Database Logical Storage ERD
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  HeaderBackgroundColor #E8E8E8
+  StereotypeFontColor #000000
+  AttributeFontColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+  FontStyle plain
+}
+
+skinparam stereotype {
+  CBackgroundColor #E8E8E8
+  CBorderColor #000000
+}
+
+entity "User" as User {
+  * user_id : INTEGER <<PK>>
+  --
+  username : TEXT
+}
+
+entity "Settings" as Settings {
+  * config_id : INTEGER <<PK>>
+  --
+  * user_id : INTEGER <<FK>>
+  theme_pref : TEXT
+  home_page : TEXT
+  default_model : TEXT
+  groq_api_key : TEXT
+  ollama_endpoint : TEXT
+  ad_block_enabled : BOOLEAN
+}
+
+entity "Bookmark" as Bookmark {
+  * bookmark_id : INTEGER <<PK>>
+  --
+  * user_id : INTEGER <<FK>>
+  title : TEXT
+  url : TEXT
+  date_added : DATETIME
+}
+
+entity "History" as History {
+  * history_id : INTEGER <<PK>>
+  --
+  * user_id : INTEGER <<FK>>
+  title : TEXT
+  url : TEXT
+  visit_count : INTEGER
+  last_visit_time : DATETIME
+}
+
+entity "DownloadLog" as DownloadLog {
+  * download_id : INTEGER <<PK>>
+  --
+  * user_id : INTEGER <<FK>>
+  filename : TEXT
+  source_url : TEXT
+  destination_path : TEXT
+  file_size : INTEGER
+  completed_time : DATETIME
+  status : TEXT
+}
+
+entity "Extension" as Extension {
+  * extension_id : INTEGER <<PK>>
+  --
+  * user_id : INTEGER <<FK>>
+  name : TEXT
+  version : TEXT
+  source_path : TEXT
+  is_enabled : BOOLEAN
+}
+
+User "1" --> "*" Bookmark : <<has>>
+User "1" --> "1" Settings : <<configures>>
+User "1" --> "*" History : <<records>>
+User "1" --> "*" DownloadLog : <<downloads>>
+User "1" --> "*" Extension : <<uses>>
+
+note right of Settings
+  Stores all configuration preferences.
+  Loaded on startup and written back 
+  dynamically on UI preferences changes.
+end note
+
+note bottom of DownloadLog
+  Keeps track of local download histories. 
+  Provides states for tracking incomplete or 
+  interrupted operations on startup.
+end note
+
+@enduml

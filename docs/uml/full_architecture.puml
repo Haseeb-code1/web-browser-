@@ -1,0 +1,149 @@
+@startuml NeuralBrowser_Architecture
+title NeuralBrowser — Full System Architecture
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+}
+
+skinparam note {
+  BackgroundColor #F0F0F0
+  BorderColor #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+  FontSize 11
+}
+
+package "Entry Point" {
+  component [main.py] as MAIN
+}
+
+package "src.ui" {
+  component [BrowserWindow] as BW
+  component [TabManager] as TM
+  component [SplashScreen] as SS
+  component [DownloadManager] as DM
+  component [ExtensionsDialog] as ED
+}
+
+package "src.core" {
+  component [SettingsManager] as SET
+  component [BookmarksManager] as BKM
+  component [HistoryManager] as HM
+  component [ExtensionManager] as EM
+  component [AdBlockerInterceptor] as ABI
+}
+
+package "src.ai_agent" {
+  component [AgentBrain] as ABRAIN
+  component [AgentWorker] as AW
+  component [ActionExecutor] as AE
+  component [PageReader] as PR
+  component [ToolDefinitions] as TD
+  component [OllamaClient «agent»] as OLAC
+}
+
+package "src.ai_assistant" {
+  component [FloatingBot] as FB
+  component [WorkerThread] as WTH
+  component [ModelRouter] as MR
+  component [SelectionWatcher] as SW
+  component [BrowserController] as BC
+  component [ResponseRenderer] as RR
+  component [GeminiClient] as GCLI
+  component [GroqClient] as GRCLI
+  component [OllamaClient «assistant»] as OLAA
+}
+
+package "src.utils" {
+  component [PathUtils] as PU
+  component [URLUtils] as UU
+  component [ExceptionLogger] as EL
+}
+
+package "External Services <<External>>" {
+  component [Groq API] as GROQ
+  component [Gemini API] as GEM
+  component [Ollama localhost] as OLLA
+  component [QWebEngine] as QWE
+  component [File System JSON] as FS
+}
+
+MAIN --> SS : <<launches>>
+MAIN --> BW : <<launches>>
+
+BW --> TM : <<uses>>
+BW --> FB : <<embeds>>
+BW --> SET : <<reads>>
+BW --> BKM : <<reads>>
+BW --> HM : <<reads>>
+
+TM --> ABI : <<intercepts via>>
+TM --> EM : <<injects via>>
+TM --> QWE : <<renders via>>
+TM --> DM : <<delegates to>>
+
+ABRAIN --> AE : <<controls>>
+ABRAIN --> PR : <<reads via>>
+ABRAIN --> AW : <<spawns>>
+ABRAIN ..> TD : <<uses>>
+AW --> OLAC : <<calls>>
+OLAC --> OLLA : HTTP
+
+FB --> WTH : <<spawns>>
+WTH --> MR : <<routes via>>
+MR --> GCLI : <<calls>>
+MR --> GRCLI : <<calls>>
+MR --> OLAA : <<calls>>
+MR --> SET : <<reads>>
+GCLI --> GEM : HTTPS
+GRCLI --> GROQ : HTTPS
+OLAA --> OLLA : HTTP
+
+SET --> FS : <<persists to>>
+BKM --> FS : <<persists to>>
+HM --> FS : <<persists to>>
+EM --> FS : <<reads from>>
+
+BW ..> PU : <<uses>>
+BW ..> UU : <<uses>>
+BW ..> EL : <<uses>>
+
+note top of ABRAIN
+  ReAct loop: Think, Act, Observe.
+  Hard cap of 10 steps before
+  automatic forced stop and cleanup.
+end note
+
+note top of MR
+  Runtime model switching with no restart.
+  Validates API keys before every dispatch
+  and falls back to Ollama if cloud fails.
+end note
+
+@enduml

@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 560" width="680" height="560">
+<style>
+    text { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11px; fill: #e2e8f0; }
+    .title { font-size: 14px; font-weight: bold; fill: #ffffff; }
+    .stereotype { font-size: 10px; fill: #94a3b8; font-style: italic; }
+    .class-header { font-size: 11px; font-weight: bold; fill: #ffffff; }
+    .arrow-label { font-size: 9px; fill: #94a3b8; }
+</style>
+<defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#94a3b8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="inheritance" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+        <path d="M 2 1 L 9 5 L 2 9 Z" fill="#0f111a" stroke="#94a3b8" stroke-width="1"/>
+    </marker>
+    <marker id="composition" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+        <path d="M 2 6 L 6 2 L 10 6 L 6 10 Z" fill="#94a3b8" stroke="#94a3b8" stroke-width="1"/>
+    </marker>
+</defs>
+<rect width="100%" height="100%" fill="#0f111a" stroke="#1e293b" stroke-width="1"/>
+<text x="20" y="25" class="title">Diagram 4 — AI Assistant Overlay Class Diagram</text>
+<rect x="240" y="60" width="200" height="85" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="240" y1="84" x2="440" y2="84" stroke="#0d9488" stroke-width="1" />
+<text x="340.0" y="72" class="stereotype" text-anchor="middle">«QWidget»</text>
+<text x="340.0" y="84" class="class-header" text-anchor="middle">FloatingBot</text>
+<text x="248" y="98" class="">- position</text>
+<text x="248" y="110" class="">- visible</text>
+<line x1="240" y1="112" x2="440" y2="112" stroke="#0d9488" stroke-width="1" />
+<text x="248" y="126" class="">+ show()</text>
+<text x="248" y="138" class="">+ hide()</text>
+<text x="248" y="150" class="">+ submit_query()</text>
+<text x="248" y="162" class="">+ drag()</text>
+<rect x="30" y="60" width="170" height="75" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="30" y1="84" x2="200" y2="84" stroke="#0d9488" stroke-width="1" />
+<text x="115.0" y="72" class="stereotype" text-anchor="middle">«QThread»</text>
+<text x="115.0" y="84" class="class-header" text-anchor="middle">WorkerThread</text>
+<text x="38" y="98" class="">- query</text>
+<text x="38" y="110" class="">- model</text>
+<line x1="30" y1="112" x2="200" y2="112" stroke="#0d9488" stroke-width="1" />
+<text x="38" y="126" class="">+ run()</text>
+<rect x="470" y="60" width="180" height="75" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="470" y1="78" x2="650" y2="78" stroke="#0d9488" stroke-width="1" />
+<text x="560.0" y="72" class="class-header" text-anchor="middle">SelectionWatcher</text>
+<text x="478" y="92" class="">- web_view</text>
+<line x1="470" y1="94" x2="650" y2="94" stroke="#0d9488" stroke-width="1" />
+<text x="478" y="108" class="">+ on_selection()</text>
+<text x="478" y="120" class="">+ offer_actions()</text>
+<rect x="30" y="200" width="170" height="75" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="30" y1="218" x2="200" y2="218" stroke="#0d9488" stroke-width="1" />
+<text x="115.0" y="212" class="class-header" text-anchor="middle">ResponseRenderer</text>
+<text x="38" y="232" class="">- container</text>
+<line x1="30" y1="234" x2="200" y2="234" stroke="#0d9488" stroke-width="1" />
+<text x="38" y="248" class="">+ render_markdown()</text>
+<text x="38" y="260" class="">+ highlight_code()</text>
+<rect x="240" y="200" width="200" height="65" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="240" y1="218" x2="440" y2="218" stroke="#0d9488" stroke-width="1" />
+<text x="340.0" y="212" class="class-header" text-anchor="middle">ModelRouter</text>
+<text x="248" y="232" class="">- settings</text>
+<line x1="240" y1="234" x2="440" y2="234" stroke="#0d9488" stroke-width="1" />
+<text x="248" y="248" class="">+ route(query)</text>
+<rect x="470" y="200" width="180" height="75" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="470" y1="218" x2="650" y2="218" stroke="#0d9488" stroke-width="1" />
+<text x="560.0" y="212" class="class-header" text-anchor="middle">BrowserController</text>
+<text x="478" y="232" class="">- web_view</text>
+<line x1="470" y1="234" x2="650" y2="234" stroke="#0d9488" stroke-width="1" />
+<text x="478" y="248" class="">+ scroll()</text>
+<text x="478" y="260" class="">+ screenshot()</text>
+<rect x="30" y="340" width="170" height="65" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="30" y1="358" x2="200" y2="358" stroke="#0d9488" stroke-width="1" />
+<text x="115.0" y="352" class="class-header" text-anchor="middle">GeminiClient</text>
+<text x="38" y="372" class="">- api_key</text>
+<line x1="30" y1="374" x2="200" y2="374" stroke="#0d9488" stroke-width="1" />
+<text x="38" y="388" class="">+ complete()</text>
+<rect x="240" y="340" width="200" height="65" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="240" y1="358" x2="440" y2="358" stroke="#0d9488" stroke-width="1" />
+<text x="340.0" y="352" class="class-header" text-anchor="middle">GroqClient</text>
+<text x="248" y="372" class="">- api_key</text>
+<line x1="240" y1="374" x2="440" y2="374" stroke="#0d9488" stroke-width="1" />
+<text x="248" y="388" class="">+ complete()</text>
+<rect x="470" y="340" width="180" height="65" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="470" y1="358" x2="650" y2="358" stroke="#0d9488" stroke-width="1" />
+<text x="560.0" y="352" class="class-header" text-anchor="middle">OllamaClient</text>
+<text x="478" y="372" class="">- model</text>
+<line x1="470" y1="374" x2="650" y2="374" stroke="#0d9488" stroke-width="1" />
+<text x="478" y="388" class="">+ complete()</text>
+<line x1="240" y1="100" x2="200" y2="100" stroke="#94a3b8" stroke-width="0.5" marker-start="url(#composition)" />
+<text x="225" y="92" class="arrow-label">1</text>
+<text x="205" y="92" class="arrow-label">1</text>
+<line x1="340" y1="145" x2="340" y2="200" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="345" y="175" class="arrow-label">routes</text>
+<line x1="240" y1="130" x2="170" y2="200" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="175" y="150" class="arrow-label">renders to</text>
+<line x1="290" y1="265" x2="160" y2="340" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="180" y="290" class="arrow-label">routes to</text>
+<line x1="340" y1="265" x2="340" y2="340" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="345" y="295" class="arrow-label">routes to</text>
+<line x1="390" y1="265" x2="510" y2="340" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="465" y="290" class="arrow-label">routes to</text>
+<line x1="470" y1="100" x2="440" y2="100" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="445" y="92" class="arrow-label">triggers</text>
+<line x1="510" y1="200" x2="410" y2="145" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="480" y="165" class="arrow-label">drives UI</text>
+</svg>

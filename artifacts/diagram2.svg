@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 480" width="680" height="480">
+<style>
+    text { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11px; fill: #e2e8f0; }
+    .title { font-size: 14px; font-weight: bold; fill: #ffffff; }
+    .stereotype { font-size: 10px; fill: #94a3b8; font-style: italic; }
+    .class-header { font-size: 11px; font-weight: bold; fill: #ffffff; }
+    .arrow-label { font-size: 9px; fill: #94a3b8; }
+</style>
+<defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#94a3b8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="inheritance" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+        <path d="M 2 1 L 9 5 L 2 9 Z" fill="#0f111a" stroke="#94a3b8" stroke-width="1"/>
+    </marker>
+    <marker id="composition" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+        <path d="M 2 6 L 6 2 L 10 6 L 6 10 Z" fill="#94a3b8" stroke="#94a3b8" stroke-width="1"/>
+    </marker>
+</defs>
+<rect width="100%" height="100%" fill="#0f111a" stroke="#1e293b" stroke-width="1"/>
+<text x="20" y="25" class="title">Diagram 2 — Core Managers Class Diagram</text>
+<rect x="40" y="60" width="180" height="85" fill="#1e2022" stroke="#64748b" stroke-width="1" rx="0" ry="0" />
+<line x1="40" y1="78" x2="220" y2="78" stroke="#64748b" stroke-width="1" />
+<text x="130.0" y="72" class="class-header" text-anchor="middle">SettingsManager</text>
+<text x="48" y="92" class="">- config_path</text>
+<line x1="40" y1="94" x2="220" y2="94" stroke="#64748b" stroke-width="1" />
+<text x="48" y="108" class="">+ load()</text>
+<text x="48" y="120" class="">+ save()</text>
+<text x="48" y="132" class="">+ get()</text>
+<text x="48" y="144" class="">+ set()</text>
+<rect x="250" y="60" width="180" height="85" fill="#1e2022" stroke="#64748b" stroke-width="1" rx="0" ry="0" />
+<line x1="250" y1="78" x2="430" y2="78" stroke="#64748b" stroke-width="1" />
+<text x="340.0" y="72" class="class-header" text-anchor="middle">HistoryManager</text>
+<text x="258" y="92" class="">- file_path</text>
+<text x="258" y="104" class="">- entries</text>
+<line x1="250" y1="106" x2="430" y2="106" stroke="#64748b" stroke-width="1" />
+<text x="258" y="120" class="">+ load()</text>
+<text x="258" y="132" class="">+ save()</text>
+<text x="258" y="144" class="">+ append()</text>
+<text x="258" y="156" class="">+ clear()</text>
+<rect x="460" y="60" width="180" height="85" fill="#1e2022" stroke="#64748b" stroke-width="1" rx="0" ry="0" />
+<line x1="460" y1="78" x2="640" y2="78" stroke="#64748b" stroke-width="1" />
+<text x="550.0" y="72" class="class-header" text-anchor="middle">BookmarksManager</text>
+<text x="468" y="92" class="">- file_path</text>
+<text x="468" y="104" class="">- bookmarks</text>
+<line x1="460" y1="106" x2="640" y2="106" stroke="#64748b" stroke-width="1" />
+<text x="468" y="120" class="">+ load()</text>
+<text x="468" y="132" class="">+ save()</text>
+<text x="468" y="144" class="">+ add()</text>
+<text x="468" y="156" class="">+ remove()</text>
+<rect x="250" y="200" width="180" height="75" fill="#1e2022" stroke="#64748b" stroke-width="1" rx="0" ry="0" />
+<line x1="250" y1="218" x2="430" y2="218" stroke="#64748b" stroke-width="1" />
+<text x="340.0" y="212" class="class-header" text-anchor="middle">ExtensionManager</text>
+<text x="258" y="232" class="">- extensions_dir</text>
+<text x="258" y="244" class="">- loaded_extensions</text>
+<line x1="250" y1="246" x2="430" y2="246" stroke="#64748b" stroke-width="1" />
+<text x="258" y="260" class="">+ load_manifests()</text>
+<text x="258" y="272" class="">+ inject_scripts()</text>
+<text x="258" y="284" class="">+ toggle()</text>
+<rect x="450" y="200" width="200" height="75" fill="#1e2022" stroke="#64748b" stroke-width="1" rx="0" ry="0" />
+<line x1="450" y1="224" x2="650" y2="224" stroke="#64748b" stroke-width="1" />
+<text x="550.0" y="212" class="stereotype" text-anchor="middle">«QWebEngineUrlRequestInterceptor»</text>
+<text x="550.0" y="224" class="class-header" text-anchor="middle">AdBlockerInterceptor</text>
+<text x="458" y="238" class="">- rules</text>
+<line x1="450" y1="240" x2="650" y2="240" stroke="#64748b" stroke-width="1" />
+<text x="458" y="254" class="">+ interceptRequest()</text>
+<text x="458" y="266" class="">+ load_rules()</text>
+<text x="458" y="278" class="">+ is_blocked()</text>
+<rect x="40" y="200" width="180" height="50" fill="#0f2924" stroke="#0d9488" stroke-width="1" rx="0" ry="0" />
+<line x1="40" y1="218" x2="220" y2="218" stroke="#0d9488" stroke-width="1" />
+<text x="130.0" y="212" class="class-header" text-anchor="middle">ModelRouter</text>
+<line x1="40" y1="222" x2="220" y2="222" stroke="#0d9488" stroke-width="1" />
+<rect x="350" y="340" width="180" height="50" fill="#0f2038" stroke="#3b82f6" stroke-width="1" rx="0" ry="0" />
+<line x1="350" y1="364" x2="530" y2="364" stroke="#3b82f6" stroke-width="1" />
+<text x="440.0" y="352" class="stereotype" text-anchor="middle">«QTabWidget»</text>
+<text x="440.0" y="364" class="class-header" text-anchor="middle">TabManager</text>
+<line x1="350" y1="368" x2="530" y2="368" stroke="#3b82f6" stroke-width="1" />
+<line x1="130" y1="200" x2="130" y2="145" stroke="#94a3b8" stroke-width="0.5" stroke-dasharray="4,4" marker-end="url(#arrow)" />
+<text x="135" y="175" class="arrow-label">&amp;lt;&amp;lt;depends&amp;gt;&amp;gt;</text>
+<line x1="390" y1="340" x2="355" y2="275" stroke="#94a3b8" stroke-width="0.5" stroke-dasharray="4,4" marker-end="url(#arrow)" />
+<text x="378" y="305" class="arrow-label">&amp;lt;&amp;lt;depends&amp;gt;&amp;gt;</text>
+<line x1="490" y1="340" x2="525" y2="275" stroke="#94a3b8" stroke-width="0.5" stroke-dasharray="4,4" marker-end="url(#arrow)" />
+<text x="515" y="305" class="arrow-label">&amp;lt;&amp;lt;depends&amp;gt;&amp;gt;</text>
+</svg>

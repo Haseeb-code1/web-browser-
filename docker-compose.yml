@@ -1,0 +1,14 @@
+services:
+  nova-browser:
+    build: .
+    image: nova-browser:latest
+    container_name: nova-browser-app
+    ports:
+      - "5900:5900"
+      - "6080:6080"
+    environment:
+      - DISPLAY=:99
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

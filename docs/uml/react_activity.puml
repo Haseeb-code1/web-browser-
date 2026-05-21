@@ -1,0 +1,87 @@
+@startuml NeuralBrowser_ReActActivity
+title NeuralBrowser — AI Agent ReAct Loop Activity Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam activity {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BarColor #000000
+  StartColor #000000
+  EndColor #000000
+}
+
+start
+
+:Receive Autonomous Browsing Task;
+:Initialize Step Count = 0;
+:Compile ReAct System Prompt with Tools Schema;
+
+repeat
+  :Extract active web page DOM structure;
+  :Add DOM Context to Prompt Message History;
+  :Spawn AgentWorker Thread;
+  :Request Next Action from Local LLM (Ollama);
+  :Receive Response String;
+  
+  if (Is response valid JSON?) then (yes)
+    :Parse JSON Object;
+    :Extract "tool" and "params";
+    
+    if (Is tool == "answer"?) then (yes)
+      :Extract final response message;
+      :Update BrowserWindow Chat UI;
+      :Clean up background threads;
+      stop
+    else (no)
+      :Pass action parameters to ActionExecutor;
+      :Simulate action (Click, Fill, Navigate, or Scroll) via JS;
+      :Log Action Result to Message History;
+      :Increment Step Count;
+    endif
+    
+  else (no)
+    :Log JSON parsing exception;
+    :Append error helper to LLM context history;
+    :Increment Step Count;
+  endif
+  
+backward:Check Loop Safety Limits;
+repeat while (Is Step Count < 10?) is (yes) not (no)
+
+:Forced stop at safety limit (Max 10 steps reached);
+:Display exceeded steps error message to user UI;
+:Clean up worker resources;
+
+stop
+
+note right
+  The ReAct loop enforces strict structured outputs. 
+  If the LLM generates plain conversational text instead of JSON, 
+  the parsing check logs it as an observation and asks it to correct.
+end note
+
+note left
+  A strict safety cap of 10 loops prevents local models 
+  from entering recursive navigation loops or infinite loops, 
+  avoiding memory leak cycles.
+end note
+
+@enduml

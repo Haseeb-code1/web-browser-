@@ -1,0 +1,146 @@
+@startuml NeuralBrowser_AgentSequence
+title NeuralBrowser — AI Agent Task Execution Flow
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam sequence {
+  ActorBackgroundColor #FFFFFF
+  ActorBorderColor #000000
+  ParticipantBackgroundColor #FFFFFF
+  ParticipantBorderColor #000000
+  LifeLineBorderColor #000000
+  LifeLineBackgroundColor #E8E8E8
+  ArrowColor #000000
+  ArrowFontColor #000000
+  BoxBackgroundColor #F0F0F0
+  BoxBorderColor #000000
+  BoxFontColor #000000
+  LoopBorderColor #000000
+  LoopFontColor #000000
+  AltBorderColor #000000
+  AltFontColor #000000
+  NoteBackgroundColor #F0F0F0
+  NoteBorderColor #000000
+  NoteFontColor #000000
+  DividerBackgroundColor #E8E8E8
+  DividerBorderColor #000000
+  GroupBorderColor #000000
+  GroupFontColor #000000
+}
+
+skinparam note {
+  BackgroundColor #F0F0F0
+  BorderColor #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+  FontSize 11
+}
+
+actor User
+participant "BrowserWindow" as BW
+participant "AgentBrain" as AB
+participant "AgentWorker\n(QThread)" as AW
+participant "OllamaClient" as OL
+participant "ActionExecutor" as AE
+participant "PageReader" as PR
+
+== Task Submission ==
+
+User -> BW : submit_task(task: str)
+activate BW
+BW -> AB : run_task(task)
+activate AB
+AB -> AW : start() [spawn QThread]
+activate AW
+
+== ReAct Loop (max 10 steps) ==
+
+loop max_steps = 10
+
+  AW -> OL : chat(history + tools_schema)
+  activate OL
+  OL --> AW : JSON {tool, params}
+  deactivate OL
+
+  AW -> AB : emit result_ready(action_json)
+
+  AB -> AB : parse_action(action_json)
+
+  alt tool == "navigate_to"
+    AB -> AE : navigate_to(url)
+    activate AE
+    AE --> AB : done
+    deactivate AE
+
+  else tool == "click_element"
+    AB -> AE : click_element(text)
+    activate AE
+    AE -> PR : extract_dom()
+    activate PR
+    PR --> AE : dom_state: dict
+    deactivate PR
+    AE --> AB : clicked / not_found
+    deactivate AE
+
+  else tool == "fill_field"
+    AB -> AE : fill_field(selector, value)
+    activate AE
+    AE --> AB : done
+    deactivate AE
+
+  else tool == "scroll_down"
+    AB -> AE : scroll_down(px)
+    activate AE
+    AE --> AB : done
+    deactivate AE
+
+  else tool == "answer"
+    AB -> BW : emit final_answer(text)
+    BW --> User : display answer
+    break
+  end
+
+  AB -> AW : start() [next step]
+
+end
+
+deactivate AW
+deactivate AB
+deactivate BW
+
+== Notes ==
+
+note over AB, AW
+  History grows each step:
+  [task, action, result, action, result ...]
+  Full context sent to Ollama every step.
+end note
+
+note over AE, PR
+  All DOM interaction runs via
+  QWebEngineView.runJavaScript()
+  on the live page.
+end note
+
+@enduml

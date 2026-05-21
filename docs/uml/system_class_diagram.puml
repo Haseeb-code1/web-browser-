@@ -1,0 +1,131 @@
+@startuml NeuralBrowser_SystemClassDiagram
+title NeuralBrowser — Unified System Class Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  HeaderBackgroundColor #E8E8E8
+  StereotypeFontColor #000000
+  AttributeFontColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+  FontStyle plain
+}
+
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.5
+  Style rectangle
+  FontStyle bold
+}
+
+skinparam stereotype {
+  CBackgroundColor #E8E8E8
+  CBorderColor #000000
+}
+
+package "src.ui" {
+  class BrowserWindow <<UI>> {
+    - tab_manager: TabManager
+    - floating_bot: FloatingBot
+    - address_bar: QLineEdit
+    + setup_ui(): void
+    + apply_theme(theme: str): void
+    + navigate(url: str): void
+  }
+
+  class TabManager <<UI>> {
+    - standard_profile: QWebEngineProfile
+    - incognito_profile: QWebEngineProfile
+    - ad_blocker: AdBlockerInterceptor
+    + new_tab(url: str): void
+    + close_tab(index: int): void
+    + get_current_page(): CustomWebPage
+  }
+}
+
+package "src.core" {
+  class SettingsManager <<Manager>> {
+    - config: dict
+    + load(): dict
+    + save(): void
+    + get(key: str): Any
+    + set(key: str, value: Any): void
+  }
+
+  class ExtensionManager <<Manager>> {
+    - loaded_extensions: dict
+    + load_manifests(): void
+    + inject_scripts(profile: QWebEngineProfile): void
+  }
+}
+
+package "src.ai_agent" {
+  class AgentBrain <<Agent>> {
+    - history: list[dict]
+    - action_executor: ActionExecutor
+    + run_task(task: str): void
+    + step(): void
+    + parse_action(json_str: str): dict
+  }
+
+  class ActionExecutor <<Agent>> {
+    - web_view: QWebEngineView
+    + click_element(text: str): void
+    + fill_field(selector: str, value: str): void
+  }
+}
+
+package "src.ai_assistant" {
+  class FloatingBot <<UI>> {
+    - router: ModelRouter
+    + submit_query(query: str): void
+    + drag(event: QMouseEvent): void
+  }
+
+  class ModelRouter <<Agent>> {
+    + route(query: str, model: str): str
+  }
+}
+
+BrowserWindow "1" *-- "1" TabManager : <<controls>>
+BrowserWindow "1" *-- "1" FloatingBot : <<embeds>>
+TabManager "1" ..> "1" ExtensionManager : <<injects>>
+BrowserWindow "1" ..> "1" SettingsManager : <<reads>>
+AgentBrain "1" --> "1" ActionExecutor : <<controls>>
+FloatingBot "1" --> "1" ModelRouter : <<routes through>>
+ModelRouter "1" ..> "1" SettingsManager : <<reads keys>>
+
+note top of BrowserWindow
+  Main Window controller coordinate
+  visual theme application (PyQt6 QSS) and
+  connect UI events directly to AI modules.
+end note
+
+note right of AgentBrain
+  Core loop orchestration using ReAct
+  technique. Coordinates parsing results and
+  command dispatches to browser views.
+end note
+
+@enduml

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 500" width="680" height="500">
+<style>
+    text { font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 11px; fill: #e2e8f0; }
+    .title { font-size: 14px; font-weight: bold; fill: #ffffff; }
+    .stereotype { font-size: 10px; fill: #94a3b8; font-style: italic; }
+    .class-header { font-size: 11px; font-weight: bold; fill: #ffffff; }
+    .arrow-label { font-size: 9px; fill: #94a3b8; }
+</style>
+<defs>
+    <!-- Arrowhead markers -->
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M 1 1 L 7 4 L 1 7" fill="none" stroke="#94a3b8" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="inheritance" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+        <path d="M 2 1 L 9 5 L 2 9 Z" fill="#0f111a" stroke="#94a3b8" stroke-width="1"/>
+    </marker>
+    <marker id="composition" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+        <path d="M 2 6 L 6 2 L 10 6 L 6 10 Z" fill="#94a3b8" stroke="#94a3b8" stroke-width="1"/>
+    </marker>
+</defs>
+<rect width="100%" height="100%" fill="#0f111a" stroke="#1e293b" stroke-width="1"/>
+<text x="20" y="25" class="title">Diagram 3 — AI Agent Subsystem Class Diagram</text>
+<rect x="250" y="60" width="180" height="85" fill="#2d1f10" stroke="#d97706" stroke-width="1" rx="0" ry="0" />
+<line x1="250" y1="78" x2="430" y2="78" stroke="#d97706" stroke-width="1" />
+<text x="340.0" y="72" class="class-header" text-anchor="middle">AgentBrain</text>
+<text x="258" y="92" class="">- max_steps</text>
+<text x="258" y="104" class="">- history</text>
+<line x1="250" y1="106" x2="430" y2="106" stroke="#d97706" stroke-width="1" />
+<text x="258" y="120" class="">+ run_task()</text>
+<text x="258" y="132" class="">+ step()</text>
+<text x="258" y="144" class="">+ parse_action()</text>
+<text x="258" y="156" class="">+ stop()</text>
+<rect x="30" y="60" width="170" height="75" fill="#2d1f10" stroke="#d97706" stroke-width="1" rx="0" ry="0" />
+<line x1="30" y1="84" x2="200" y2="84" stroke="#d97706" stroke-width="1" />
+<text x="115.0" y="72" class="stereotype" text-anchor="middle">«QThread»</text>
+<text x="115.0" y="84" class="class-header" text-anchor="middle">AgentWorker</text>
+<text x="38" y="98" class="">- task</text>
+<text x="38" y="110" class="">- ollama_client</text>
+<line x1="30" y1="112" x2="200" y2="112" stroke="#d97706" stroke-width="1" />
+<text x="38" y="126" class="">+ run()</text>
+<rect x="460" y="60" width="190" height="65" fill="#2d1f10" stroke="#d97706" stroke-width="1" rx="0" ry="0" />
+<line x1="460" y1="78" x2="650" y2="78" stroke="#d97706" stroke-width="1" />
+<text x="555.0" y="72" class="class-header" text-anchor="middle">ToolDefinitions</text>
+<text x="468" y="92" class="">- system_prompt</text>
+<text x="468" y="104" class="">- tools_schema</text>
+<line x1="460" y1="106" x2="650" y2="106" stroke="#d97706" stroke-width="1" />
+<rect x="30" y="210" width="170" height="75" fill="#2d1f10" stroke="#d97706" stroke-width="1" rx="0" ry="0" />
+<line x1="30" y1="228" x2="200" y2="228" stroke="#d97706" stroke-width="1" />
+<text x="115.0" y="222" class="class-header" text-anchor="middle">OllamaClient</text>
+<text x="38" y="242" class="">- model</text>
+<text x="38" y="254" class="">- base_url</text>
+<line x1="30" y1="256" x2="200" y2="256" stroke="#d97706" stroke-width="1" />
+<text x="38" y="270" class="">+ chat()</text>
+<text x="38" y="282" class="">+ stream()</text>
+<rect x="250" y="210" width="180" height="95" fill="#2d1f10" stroke="#d97706" stroke-width="1" rx="0" ry="0" />
+<line x1="250" y1="228" x2="430" y2="228" stroke="#d97706" stroke-width="1" />
+<text x="340.0" y="222" class="class-header" text-anchor="middle">ActionExecutor</text>
+<text x="258" y="242" class="">- web_view</text>
+<line x1="250" y1="244" x2="430" y2="244" stroke="#d97706" stroke-width="1" />
+<text x="258" y="258" class="">+ click_element()</text>
+<text x="258" y="270" class="">+ fill_field()</text>
+<text x="258" y="282" class="">+ submit_form()</text>
+<text x="258" y="294" class="">+ scroll_down()</text>
+<text x="258" y="306" class="">+ navigate_to()</text>
+<rect x="460" y="210" width="190" height="85" fill="#2d1f10" stroke="#d97706" stroke-width="1" rx="0" ry="0" />
+<line x1="460" y1="228" x2="650" y2="228" stroke="#d97706" stroke-width="1" />
+<text x="555.0" y="222" class="class-header" text-anchor="middle">PageReader</text>
+<text x="468" y="242" class="">- web_view</text>
+<line x1="460" y1="244" x2="650" y2="244" stroke="#d97706" stroke-width="1" />
+<text x="468" y="258" class="">+ extract_dom()</text>
+<text x="468" y="270" class="">+ get_links()</text>
+<text x="468" y="282" class="">+ get_inputs()</text>
+<text x="468" y="294" class="">+ get_forms()</text>
+<line x1="250" y1="100" x2="200" y2="100" stroke="#94a3b8" stroke-width="0.5" marker-start="url(#composition)" />
+<text x="236" y="92" class="arrow-label">1</text>
+<text x="205" y="92" class="arrow-label">1</text>
+<line x1="340" y1="145" x2="340" y2="210" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="345" y="180" class="arrow-label">controls</text>
+<line x1="410" y1="145" x2="480" y2="210" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="450" y="175" class="arrow-label">reads</text>
+<line x1="430" y1="90" x2="460" y2="90" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="438" y="82" class="arrow-label">uses</text>
+<line x1="115" y1="135" x2="115" y2="210" stroke="#94a3b8" stroke-width="0.5" marker-end="url(#arrow)" />
+<text x="120" y="170" class="arrow-label">calls</text>
+</svg>

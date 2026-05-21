@@ -1,0 +1,152 @@
+@startuml NeuralBrowser_Core_Layer
+title NeuralBrowser — Core Managers Class Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  HeaderBackgroundColor #E8E8E8
+  StereotypeFontColor #000000
+  AttributeFontColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+  FontStyle plain
+}
+
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.5
+  Style rectangle
+  FontStyle bold
+}
+
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+}
+
+skinparam note {
+  BackgroundColor #F0F0F0
+  BorderColor #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam stereotype {
+  CBackgroundColor #E8E8E8
+  CBorderColor #000000
+}
+
+class QWebEngineUrlRequestInterceptor <<External>>
+
+package "src.core" {
+
+  class SettingsManager <<Manager>> {
+    - config_path: str
+    - config: dict
+    + load(): dict
+    + save(): void
+    + get(key: str): Any
+    + set(key: str, value: Any): void
+    + reset(): void
+  }
+
+  class BookmarksManager <<Manager>> {
+    - file_path: str
+    - bookmarks: list[dict]
+    + load(): list
+    + save(): void
+    + add(title: str, url: str): void
+    + remove(url: str): void
+    + search(query: str): list
+  }
+
+  class HistoryManager <<Manager>> {
+    - file_path: str
+    - entries: list[dict]
+    + load(): list
+    + save(): void
+    + append(title: str, url: str): void
+    + clear(): void
+    + search(query: str): list
+  }
+
+  class ExtensionManager <<Manager>> {
+    - extensions_dir: str
+    - loaded_extensions: dict
+    + load_manifests(): void
+    + inject_scripts(profile: QWebEngineProfile): void
+    + toggle(name: str, enabled: bool): void
+    + get_enabled(): list
+    + reload(name: str): void
+  }
+
+  class AdBlockerInterceptor <<Interceptor>> {
+    - rules: list[str]
+    - block_count: int
+    + interceptRequest(info: QWebEngineUrlRequestInfo): void
+    + load_rules(path: str): void
+    + is_blocked(url: str): bool
+    + add_rule(pattern: str): void
+    + get_stats(): dict
+  }
+}
+
+package "src.ui" {
+  class BrowserWindow <<UI>>
+  class TabManager <<UI>>
+}
+
+package "src.ai_assistant" {
+  class ModelRouter <<Agent>>
+}
+
+AdBlockerInterceptor --|> QWebEngineUrlRequestInterceptor : <<extends>>
+
+ModelRouter "1" ..> "1" SettingsManager : <<reads keys>>
+BrowserWindow "1" ..> "1" SettingsManager : <<reads theme>>
+TabManager "1" ..> "1" ExtensionManager : <<injects scripts>>
+TabManager "1" ..> "1" AdBlockerInterceptor : <<intercepts>>
+BrowserWindow "1" ..> "1" BookmarksManager : <<displays>>
+BrowserWindow "1" ..> "1" HistoryManager : <<displays>>
+
+note top of AdBlockerInterceptor
+  Extends Qt interceptor to block ad URLs.
+  Regex rules loaded from a local
+  filter list file on startup.
+end note
+
+note right of SettingsManager
+  Single source of truth for all preferences.
+  Persisted as JSON to the user data directory.
+  Shared across all subsystems via injection.
+end note
+
+@enduml
