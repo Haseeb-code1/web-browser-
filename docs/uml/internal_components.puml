@@ -1,0 +1,90 @@
+@startuml NeuralBrowser_InternalComponents
+title NeuralBrowser — Internal Component Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+}
+
+interface "User GUI Input" as GUI_Int
+interface "Browser Actions API" as Act_Int
+interface "Settings Interface" as Sett_Int
+interface "AI Model Router" as AI_Int
+interface "DOM Extraction Interface" as DOM_Int
+
+package "User Interface Layer" {
+  component [BrowserWindow UI] as UI_Comp
+  component [Floating AI Assistant UI] as Bot_Comp
+}
+
+package "Core Management Layer" {
+  component [Settings Manager Component] as Sett_Comp
+  component [Tab & Profile Manager] as Tab_Comp
+  component [Extensions & Script Injector] as Ext_Comp
+}
+
+package "AI Orchestration Layer" {
+  component [Autonomous Agent Engine] as Agent_Comp
+  component [AI Client Router] as Router_Comp
+}
+
+package "Web Core Layer" {
+  component [QtWebEngine Chromium Core] as Chrome_Comp
+}
+
+GUI_Int -- UI_Comp
+UI_Comp ..> Sett_Int : <<calls>>
+UI_Comp ..> Act_Int : <<controls>>
+UI_Comp --> Bot_Comp : <<triggers overlay>>
+
+Tab_Comp -- Act_Int
+Tab_Comp ..> Sett_Int : <<reads preferences>>
+Tab_Comp --> Ext_Comp : <<requests content scripts>>
+Tab_Comp --> Chrome_Comp : <<embeds views>>
+
+Sett_Comp -- Sett_Int
+Ext_Comp ..> Chrome_Comp : <<injects scripts to>>
+
+Agent_Comp ..> Act_Int : <<automates clicks/inputs>>
+Agent_Comp ..> DOM_Int : <<reads DOM structure>>
+Agent_Comp ..> AI_Int : <<submits reasoning tasks>>
+
+Bot_Comp ..> AI_Int : <<submits queries>>
+Bot_Comp ..> DOM_Int : <<gathers contextual selection>>
+
+Router_Comp -- AI_Int
+Router_Comp ..> Sett_Int : <<fetches API keys>>
+
+Chrome_Comp -- DOM_Int
+
+note top of Tab_Comp
+  Core Component maintaining Standard and Volatile incognito 
+  chromium contexts. Manages cookies and download loops.
+end note
+
+note right of Agent_Comp
+  Autonomous loop driver executing ReAct Replay.
+  Converts text targets into element click sequences.
+end note
+
+@enduml

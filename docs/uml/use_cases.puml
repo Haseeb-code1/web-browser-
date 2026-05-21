@@ -1,0 +1,70 @@
+@startuml NeuralBrowser_UseCases
+title NeuralBrowser — System Use Case Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam usecase {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+}
+
+actor "Human User" as User
+actor "Local Ollama LLM" as Ollama <<System>>
+actor "External API (Groq/Gemini)" as Cloud <<System>>
+
+package "NeuralBrowser Desktop Application" {
+  usecase "Browse Websites" as UC_Browse
+  usecase "Private Mode (Incognito)" as UC_Incognito
+  usecase "Manage History & Bookmarks" as UC_Storage
+  usecase "Toggle Extensions & Adblock" as UC_Config
+  usecase "Trigger Autonomous Task" as UC_Agent
+  usecase "Highlight Page Text for Help" as UC_Watcher
+  usecase "Ask General AI Overlay Questions" as UC_Chat
+}
+
+User --> UC_Browse : <<initiates>>
+User --> UC_Incognito : <<initiates>>
+User --> UC_Storage : <<manages>>
+User --> UC_Config : <<toggles>>
+User --> UC_Agent : <<initiates>>
+User --> UC_Watcher : <<highlights>>
+User --> UC_Chat : <<submits>>
+
+UC_Agent ..> UC_Browse : <<include>>
+UC_Watcher ..> UC_Chat : <<include>>
+
+UC_Agent --> Ollama : <<queries local model>>
+UC_Chat --> Ollama : <<queries>>
+UC_Chat --> Cloud : <<queries>>
+
+note top of UC_Incognito
+  Incognito profile creates off-the-record profile 
+  with ad blocker enabled. Storage is strictly volatile 
+  in-RAM, avoiding write cycles on system disks.
+end note
+
+note bottom of UC_Agent
+  Agent executes browsing steps autonomously.
+  Includes opening pages, searching elements,
+  and executing page forms simulation actions.
+end note
+
+@enduml

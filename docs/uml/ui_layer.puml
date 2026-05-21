@@ -1,0 +1,164 @@
+@startuml NeuralBrowser_UI_Layer
+title NeuralBrowser — UI Layer Class Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  HeaderBackgroundColor #E8E8E8
+  StereotypeFontColor #000000
+  AttributeFontColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+  FontStyle plain
+}
+
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.5
+  Style rectangle
+  FontStyle bold
+}
+
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+}
+
+skinparam note {
+  BackgroundColor #F0F0F0
+  BorderColor #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam stereotype {
+  CBackgroundColor #E8E8E8
+  CBorderColor #000000
+}
+
+package "src.ui" {
+
+  class SplashScreen <<UI>> {
+    - animation: QPropertyAnimation
+    - progress: QProgressBar
+    - timer: QTimer
+    + show_animation(): void
+    + launch_browser(): void
+    + on_animation_done(): void
+  }
+
+  class BrowserWindow <<UI>> {
+    - tab_manager: TabManager
+    - floating_bot: FloatingBot
+    - address_bar: QLineEdit
+    - sidebar: QWidget
+    - current_theme: str
+    - settings: SettingsManager
+    + setup_ui(): void
+    + apply_theme(theme: str): void
+    + open_tab(url: str): void
+    + open_incognito_tab(): void
+    + toggle_sidebar(): void
+    + navigate(url: str): void
+    + update_address_bar(url: str): void
+    + show_bookmarks(): void
+    + show_history(): void
+  }
+
+  class TabManager <<UI>> {
+    - standard_profile: QWebEngineProfile
+    - incognito_profile: QWebEngineProfile
+    - ad_blocker: AdBlockerInterceptor
+    - extension_manager: ExtensionManager
+    + new_tab(url: str): void
+    + new_incognito_tab(): void
+    + inject_extensions(page: CustomWebPage): void
+    + on_download(item: QWebEngineDownloadItem): void
+    + close_tab(index: int): void
+    + get_current_page(): CustomWebPage
+  }
+
+  class CustomWebPage <<UI>> {
+    - profile: QWebEngineProfile
+    + acceptNavigationRequest(url, type, main): bool
+  }
+
+  class DownloadManager <<UI>> {
+    - destination: str
+    - active_downloads: list
+    + handle_download(item: QWebEngineDownloadItem): void
+    + show_dialog(): str
+    + cancel(item): void
+    + on_progress(received: int, total: int): void
+  }
+
+  class ExtensionsDialog <<Dialog>> {
+    - extension_list: QListWidget
+    - extension_manager: ExtensionManager
+    + load_extensions(): void
+    + toggle_extension(name: str): void
+    + refresh(): void
+  }
+}
+
+package "src.core" {
+  class SettingsManager <<Manager>>
+  class ExtensionManager <<Manager>>
+  class AdBlockerInterceptor <<Interceptor>>
+}
+
+package "src.ai_assistant" {
+  class FloatingBot <<UI>>
+}
+
+SplashScreen "1" ..> "1" BrowserWindow : <<creates>>
+BrowserWindow "1" *-- "1" TabManager : <<controls>>
+BrowserWindow "1" *-- "1" FloatingBot : <<embeds>>
+TabManager "1" *-- "*" CustomWebPage : <<spawns>>
+TabManager "1" *-- "1" DownloadManager : <<delegates>>
+TabManager "1" ..> "1" ExtensionManager : <<injects>>
+TabManager "1" ..> "1" AdBlockerInterceptor : <<uses>>
+BrowserWindow "1" ..> "1" ExtensionsDialog : <<opens>>
+BrowserWindow "1" ..> "1" SettingsManager : <<reads>>
+
+note top of BrowserWindow
+  Coordinates all UI subsystems.
+  Theme switching applies QSS
+  stylesheets at runtime without restart.
+end note
+
+note right of TabManager
+  Maintains two separate QWebEngineProfile
+  instances: standard and incognito.
+  Cookie and cache stores are fully isolated.
+end note
+
+@enduml

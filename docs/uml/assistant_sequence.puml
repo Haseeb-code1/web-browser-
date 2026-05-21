@@ -1,0 +1,137 @@
+@startuml NeuralBrowser_AssistantSequence
+title NeuralBrowser — AI Assistant Query Flow
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam sequence {
+  ActorBackgroundColor #FFFFFF
+  ActorBorderColor #000000
+  ParticipantBackgroundColor #FFFFFF
+  ParticipantBorderColor #000000
+  LifeLineBorderColor #000000
+  LifeLineBackgroundColor #E8E8E8
+  ArrowColor #000000
+  ArrowFontColor #000000
+  BoxBackgroundColor #F0F0F0
+  BoxBorderColor #000000
+  BoxFontColor #000000
+  LoopBorderColor #000000
+  LoopFontColor #000000
+  AltBorderColor #000000
+  AltFontColor #000000
+  NoteBackgroundColor #F0F0F0
+  NoteBorderColor #000000
+  NoteFontColor #000000
+  DividerBackgroundColor #E8E8E8
+  DividerBorderColor #000000
+  GroupBorderColor #000000
+  GroupFontColor #000000
+}
+
+skinparam note {
+  BackgroundColor #F0F0F0
+  BorderColor #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+  FontSize 11
+}
+
+actor User
+participant "FloatingBot" as FB
+participant "WorkerThread\n(QThread)" as WT
+participant "ModelRouter" as MR
+participant "SettingsManager" as SM
+participant "GroqClient" as GC
+participant "GeminiClient" as GMC
+participant "OllamaClient" as OLC
+participant "ResponseRenderer" as RR
+
+== Query Submission ==
+
+User -> FB : type query + select model
+activate FB
+FB -> WT : run(query, model)
+activate WT
+
+== Routing ==
+
+WT -> MR : route(query, model)
+activate MR
+MR -> SM : get(api_key, model_pref)
+activate SM
+SM --> MR : key: str, pref: str
+deactivate SM
+
+== Model Dispatch ==
+
+alt model == "groq"
+  MR -> GC : complete(query)
+  activate GC
+  GC --> MR : response: str
+  deactivate GC
+
+else model == "gemini"
+  MR -> GMC : complete(query)
+  activate GMC
+  GMC --> MR : response: str
+  deactivate GMC
+
+else model == "ollama"
+  MR -> OLC : complete(query)
+  activate OLC
+  OLC --> MR : response: str
+  deactivate OLC
+end
+
+MR --> WT : raw_response: str
+deactivate MR
+
+== Rendering ==
+
+WT -> FB : emit result_ready(raw_response)
+deactivate WT
+
+FB -> RR : render_markdown(raw_response)
+activate RR
+RR --> FB : rendered HTML
+deactivate RR
+
+FB --> User : display response
+deactivate FB
+
+== Notes ==
+
+note over MR, SM
+  Key lookup happens at every request.
+  Changes in settings apply immediately
+  with no application restart needed.
+end note
+
+note over FB, WT
+  WorkerThread prevents UI blocking.
+  FloatingBot stays responsive during
+  all LLM network calls.
+end note
+
+@enduml

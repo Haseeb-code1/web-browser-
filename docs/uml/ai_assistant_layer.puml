@@ -1,0 +1,171 @@
+@startuml NeuralBrowser_AIAssistant_Layer
+title NeuralBrowser — AI Assistant Overlay Class Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  HeaderBackgroundColor #E8E8E8
+  StereotypeFontColor #000000
+  AttributeFontColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+  FontStyle plain
+}
+
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.5
+  Style rectangle
+  FontStyle bold
+}
+
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+}
+
+skinparam note {
+  BackgroundColor #F0F0F0
+  BorderColor #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam stereotype {
+  CBackgroundColor #E8E8E8
+  CBorderColor #000000
+}
+
+package "src.ai_assistant" {
+
+  class FloatingBot <<UI>> {
+    - position: QPoint
+    - chat_history: list[dict]
+    - worker: WorkerThread
+    - model_selector: QComboBox
+    - response_renderer: ResponseRenderer
+    {signal} query_submitted(query: str)
+    + show(): void
+    + hide(): void
+    + submit_query(query: str): void
+    + drag(event: QMouseEvent): void
+    + on_result_ready(response: str): void
+    + clear_chat(): void
+  }
+
+  class WorkerThread <<Worker>> {
+    - query: str
+    - model: str
+    - router: ModelRouter
+    {signal} result_ready(response: str)
+    {signal} error_occurred(msg: str)
+    + run(): void
+  }
+
+  class ModelRouter <<Agent>> {
+    - settings: SettingsManager
+    + route(query: str, model: str): str
+    + get_client(model: str): BaseClient
+    + validate_key(model: str): bool
+  }
+
+  class SelectionWatcher <<Agent>> {
+    - web_view: QWebEngineView
+    - floating_bot: FloatingBot
+    + on_selection(text: str): void
+    + offer_actions(text: str): void
+    + inject_watcher_js(): void
+  }
+
+  class BrowserController <<Agent>> {
+    - web_view: QWebEngineView
+    + scroll(direction: str, px: int): void
+    + screenshot(): QPixmap
+    + get_url(): str
+  }
+
+  class ResponseRenderer <<UI>> {
+    - container: QTextBrowser
+    + render_markdown(text: str): void
+    + highlight_code(lang: str, code: str): void
+    + clear(): void
+  }
+
+  class GeminiClient <<Client>> {
+    - api_key: str
+    - model: str
+    + complete(query: str): str
+    + is_available(): bool
+  }
+
+  class GroqClient <<Client>> {
+    - api_key: str
+    - model: str
+    + complete(query: str): str
+    + is_available(): bool
+  }
+
+  class OllamaClient <<Client>> {
+    - model: str
+    - base_url: str
+    + complete(query: str): str
+    + is_available(): bool
+  }
+}
+
+package "src.core" {
+  class SettingsManager <<Manager>>
+}
+
+FloatingBot "1" *-- "1" WorkerThread : <<manages>>
+FloatingBot "1" --> "1" ResponseRenderer : <<renders to>>
+FloatingBot "1" ..> "1" ModelRouter : <<routes through>>
+WorkerThread "1" --> "1" ModelRouter : <<calls>>
+ModelRouter "1" --> "0..1" GeminiClient : <<uses>>
+ModelRouter "1" --> "0..1" GroqClient : <<uses>>
+ModelRouter "1" --> "0..1" OllamaClient : <<uses>>
+ModelRouter "1" ..> "1" SettingsManager : <<reads keys>>
+SelectionWatcher "1" --> "1" FloatingBot : <<triggers>>
+BrowserController "1" ..> "1" FloatingBot : <<quick actions>>
+
+note top of FloatingBot
+  Frameless always-on-top QWidget.
+  QPropertyAnimation drives fade-in
+  and fade-out overlay transitions.
+end note
+
+note right of ModelRouter
+  Reads api_key and model_pref from
+  SettingsManager at every request so
+  key changes apply without restart.
+end note
+
+@enduml

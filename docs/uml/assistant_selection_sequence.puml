@@ -1,0 +1,117 @@
+@startuml NeuralBrowser_AssistantSelectionSequence
+title NeuralBrowser — AI Assistant User Selection Query Flow
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam sequence {
+  ActorBackgroundColor #FFFFFF
+  ActorBorderColor #000000
+  ParticipantBackgroundColor #FFFFFF
+  ParticipantBorderColor #000000
+  LifeLineBorderColor #000000
+  LifeLineBackgroundColor #E8E8E8
+  ArrowColor #000000
+  ArrowFontColor #000000
+  BoxBackgroundColor #F0F0F0
+  BoxBorderColor #000000
+  BoxFontColor #000000
+  LoopBorderColor #000000
+  LoopFontColor #000000
+  AltBorderColor #000000
+  AltFontColor #000000
+  NoteBackgroundColor #F0F0F0
+  NoteBorderColor #000000
+  NoteFontColor #000000
+  DividerBackgroundColor #E8E8E8
+  DividerBorderColor #000000
+  GroupBorderColor #000000
+  GroupFontColor #000000
+}
+
+actor User
+participant "SelectionWatcher" as SW
+participant "FloatingBot" as FB
+participant "WorkerThread\n(QThread)" as WT
+participant "ModelRouter" as MR
+participant "SettingsManager" as SM
+participant "GroqClient" as GC
+participant "ResponseRenderer" as RR
+
+== Text Selection Capture ==
+
+User -> SW : Highlights text on page
+activate SW
+SW --> User : Display popup context menu (Explain, Summarize, Translate)
+deactivate SW
+
+User -> SW : Click "Explain Selection"
+activate SW
+SW -> FB : open_animate(selected_text)
+activate FB
+deactivate SW
+
+== Thread Dispatching ==
+
+FB -> FB : submit_query()
+FB -> WT : start(query, context)
+activate WT
+
+== API Key & Routing ==
+
+WT -> MR : route(query, model)
+activate MR
+MR -> SM : get("groq_api_key")
+activate SM
+SM --> MR : api_key: str
+deactivate SM
+
+== External Dispatch ==
+
+MR -> GC : complete(query)
+activate GC
+GC --> MR : raw_response: str
+deactivate GC
+MR --> WT : response: str
+deactivate MR
+
+== Rendering AI Response ==
+
+WT --> FB : emit result_ready(response)
+deactivate WT
+
+FB -> RR : render_markdown(response)
+activate RR
+RR --> FB : rendered HTML
+deactivate RR
+FB --> User : display response overlay
+deactivate FB
+
+== Notes ==
+
+note over SW, FB
+  SelectionWatcher injects Javascript handlers into the Page DOM 
+  to listen to page highlight events and expose context menus.
+end note
+
+note over FB, WT
+  Spawning WorkerThread keeps the GUI fluid 
+  and prevent PyQt window freeze during network API calls.
+end note
+
+@enduml

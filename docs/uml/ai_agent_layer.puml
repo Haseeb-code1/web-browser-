@@ -1,0 +1,151 @@
+@startuml NeuralBrowser_AIAgent_Layer
+title NeuralBrowser — AI Agent Subsystem Class Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  HeaderBackgroundColor #E8E8E8
+  StereotypeFontColor #000000
+  AttributeFontColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+  FontStyle plain
+}
+
+skinparam package {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.5
+  Style rectangle
+  FontStyle bold
+}
+
+skinparam component {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+}
+
+skinparam note {
+  BackgroundColor #F0F0F0
+  BorderColor #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam arrow {
+  Color #000000
+  FontColor #000000
+  FontSize 11
+}
+
+skinparam stereotype {
+  CBackgroundColor #E8E8E8
+  CBorderColor #000000
+}
+
+package "src.ai_agent" {
+
+  class AgentBrain <<Agent>> {
+    - max_steps: int
+    - history: list[dict]
+    - current_worker: AgentWorker
+    - action_executor: ActionExecutor
+    - page_reader: PageReader
+    + run_task(task: str): void
+    + step(): void
+    + parse_action(json_str: str): dict
+    + stop(): void
+    + reset(): void
+    + on_result(result: str): void
+  }
+
+  class AgentWorker <<Worker>> {
+    - task: str
+    - history: list[dict]
+    - ollama_client: OllamaClient
+    {signal} result_ready(result: str)
+    {signal} error_occurred(msg: str)
+    + run(): void
+    # build_prompt(): str
+  }
+
+  class ActionExecutor <<Agent>> {
+    - web_view: QWebEngineView
+    + click_element(text: str): void
+    + fill_field(selector: str, value: str): void
+    + submit_form(selector: str): void
+    + scroll_down(px: int): void
+    + navigate_to(url: str): void
+    + run_js(script: str): void
+  }
+
+  class PageReader <<Agent>> {
+    - web_view: QWebEngineView
+    + extract_dom(): dict
+    + get_links(): list[dict]
+    + get_inputs(): list[dict]
+    + get_forms(): list[dict]
+    + get_visible_text(): str
+    # run_extraction_js(): str
+  }
+
+  class OllamaClient <<Client>> {
+    - model: str
+    - base_url: str
+    - timeout: int
+    + chat(messages: list): str
+    + stream(messages: list): Generator
+    + is_available(): bool
+    + list_models(): list
+  }
+
+  class ToolDefinitions <<Static>> {
+    {static} SYSTEM_PROMPT: str
+    {static} TOOLS_SCHEMA: list[dict]
+    {static} get_react_prompt(): str
+    {static} get_tool_schema(name: str): dict
+  }
+}
+
+AgentBrain "1" *-- "1" AgentWorker : <<creates>>
+AgentBrain "1" --> "1" ActionExecutor : <<controls>>
+AgentBrain "1" --> "1" PageReader : <<reads via>>
+AgentBrain "1" ..> "1" ToolDefinitions : <<uses>>
+AgentWorker "1" --> "1" OllamaClient : <<calls>>
+AgentWorker "1" ..> "1" ToolDefinitions : <<references>>
+ActionExecutor "1" ..> "1" PageReader : <<reads DOM>>
+
+note top of AgentBrain
+  Implements ReAct loop: Think, Act, Observe.
+  Parses JSON tool calls from LLM and routes
+  to ActionExecutor on each step. Max 10 steps.
+end note
+
+note right of AgentWorker
+  Runs off main thread via QThread.
+  Emits result_ready signal when
+  Ollama returns a complete action JSON.
+end note
+
+@enduml

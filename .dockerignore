@@ -1,0 +1,24 @@
+# Python build and cache artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec
+
+# Local virtual environment
+.venv/
+venv/
+ENV/
+
+# Local logs and runtime caches
+data/logs/
+*.log
+
+# Version control system metadata
+.git/
+.gitignore

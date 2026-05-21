@@ -1,0 +1,95 @@
+@startuml NeuralBrowser_DeploymentTopology
+title NeuralBrowser — Physical Deployment Topology Diagram
+
+skinparam {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  FontName JetBrains Mono
+  FontSize 12
+  ArrowColor #000000
+  ArrowThickness 1.2
+  Shadowing false
+  RoundCorner 0
+  DefaultTextAlignment center
+  Padding 8
+  Margin 6
+  LineThickness 1
+  Monochrome true
+  LineType ortho
+}
+
+skinparam node {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.5
+}
+
+skinparam database {
+  BackgroundColor #FFFFFF
+  BorderColor #000000
+  FontColor #000000
+  BorderThickness 1.2
+}
+
+node "Client Desktop PC" {
+  node "Windows / Linux OS" {
+    node "Python 3.11 Execution Environment" {
+      artifact "NeuralBrowser Application (.py/.exe)" as App
+      component "PyQt6 Engine" as PyQt
+      component "QtWebEngine Core (Chromium)" as QWeb
+    }
+
+    node "Local LLM Daemon" {
+      component "Ollama Service (localhost:11434)" as Ollama
+      database "Local Weights Directory" {
+        component "Phi-3 Mini Model" as Phi
+        component "Llama-3 Model" as Llama
+      }
+    }
+
+    database "Persistent User Storage" {
+      file "config.json" as Conf
+      file "bookmarks.json" as Book
+      file "history.json" as Hist
+    }
+  }
+}
+
+node "Cloud Infrastructure" as Cloud {
+  node "Groq API Server" {
+    component "Groq Llama 3 Inference Engine" as GroqAPI
+  }
+
+  node "Gemini API Server" {
+    component "Gemini Flash Inference Engine" as GemAPI
+  }
+}
+
+App --> PyQt : <<binds>>
+App --> QWeb : <<controls>>
+App ..> Conf : <<reads/writes>>
+App ..> Book : <<reads/writes>>
+App ..> Hist : <<reads/writes>>
+
+App --> Ollama : <<calls local API>>
+Ollama --> Phi : <<loads>>
+Ollama --> Llama : <<loads>>
+
+App --> GroqAPI : <<calls model API>>
+App --> GemAPI : <<calls model API>>
+
+note top of App
+  NeuralBrowser compiles all dependencies 
+  locally. Performs zero tracking or cloud telemetry, 
+  saving bookmarks and histories in pure local files.
+end note
+
+note right of Ollama
+  Autonomous ReAct Agent utilizes local Ollama 
+  to run operations. Keeps all webpage scanning 
+  and processing data locally on client machine.
+end note
+
+@enduml
